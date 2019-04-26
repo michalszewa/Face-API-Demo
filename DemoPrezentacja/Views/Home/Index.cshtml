@@ -1,0 +1,167 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Client side libs required  -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.25.2/css/blueimp-gallery.min.css" crossorigin="anonymous">
+
+<style>
+    html {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    main {
+        margin: 20px;
+        text-align:center;
+    }
+
+    .dropzone {
+        border: 3px dashed #00a1f1;
+        background: #F0F8FF;
+        margin: 25px;
+        border-radius: 5px;
+        max-width: 400px;
+    }
+
+        .dropzone .dz-message {
+            font-weight: 350;
+        }
+
+            .dropzone .dz-message .note {
+                font-family: sans-serif;
+                font-size: 18px;
+                font-weight: 200;
+                display: block;
+                margin-top 1.5rem;
+            }
+
+   #karta > ul > li
+   {
+       display:inherit;
+   }
+   #karta > ul > li p
+   {
+       margin-left: 5px;
+   }
+
+
+</style>
+
+
+<main>
+    <div class="box header">
+        <h1><span class="fa fa-user-circle-o"></span> <span id="page-title">Demo Prezentacja</span></h1>
+    </div>
+
+    <div class="box content">
+        <hr>
+        <h2>Wgraj zdjęcie</h2>
+        <div>
+            <form action="/api/images/upload"
+                  class="dropzone needsclick dz-clickable"
+                  id="image-upload"
+                  method="post"
+                  enctype="multipart/form"
+                  style="display:inline-block;">
+                 
+
+                <div class="dz-message needsclick">
+                    <span class="note needsclick">
+                        Upuść albo kliknij tutaj aby wgrać zdjęcie.
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="karta" class="card mx-auto text-left" style="width: 18rem; display:none;">
+        <div class="card-body">
+            <h5 class="card-title">Informacje o zdjęciu</h5>
+        </div>
+        <ul id="infolist" class="list-group list-group-flush">
+            <li class="list-group-item">Płeć: <p id="gender"></p></li>
+            <li class="list-group-item">Wiek: <p id="age"></p></li>
+            <li class="list-group-item">Uśmiech w: <p id="smile"></p></li>
+            <li class="list-group-item">Okulary: <p id="glasses"></p></li>
+        </ul>
+        <div class="card-body">
+            <h5 class="card-title">Włosy na twarzy</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Wąsy: <p id="wasy"></p></li>
+            <li class="list-group-item">Broda: <p id="broda"></p></li>
+            <li class="list-group-item">Boczki: <p id="boczki"></p></li>
+        </ul>
+        <div class="card-body">
+            <h5 class="card-title">Emocje</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Złość: <p id="anger"></p></li>
+            <li class="list-group-item">Pogarda: <p id="contempt"></p></li>
+            <li class="list-group-item">Obrzydzenie: <p id="disgust"></p></li>
+            <li class="list-group-item">Strach: <p id="fear"></p></li>
+            <li class="list-group-item">Szczęście: <p id="hapiness"></p></li>
+            <li class="list-group-item">Neutral: <p id="neutral"></p></li>
+            <li class="list-group-item">Smutek: <p id="sadness"></p></li>
+            <li class="list-group-item">Zaskoczonko: <p id="surprise"></p></li>
+        </ul>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.25.2/js/blueimp-gallery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+<script>
+
+    function fetchImageLinks() {
+        $.get("api/Images/thumbnails", function (data) {
+            $("#karta").css("display", "block");
+            $("#gender").text(data.faceAttributes.gender);
+            $("#age").text(data.faceAttributes.age);
+            $("#smile").text(data.faceAttributes.smile * 100).append("%");
+            $("#glasses").text(data.faceAttributes.glasses);
+
+            $("#wasy").text(data.faceAttributes.facialHair.moustache * 100).append("%");
+            $("#broda").text(data.faceAttributes.facialHair.beard * 100).append("%");
+            $("#boczki").text(data.faceAttributes.facialHair.sideburns * 100).append("%");
+
+            $("#anger").text(data.faceAttributes.emotion.anger * 100).append("%");
+            $("#contempt").text(data.faceAttributes.emotion.contempt * 100).append("%");
+            $("#disgust").text(data.faceAttributes.emotion.disgust * 100).append("%");
+            $("#fear").text(data.faceAttributes.emotion.fear * 100).append("%");
+            $("#hapiness").text(data.faceAttributes.emotion.hapiness * 100).append("%");
+            $("#neutral").text(data.faceAttributes.emotion.neutral * 100).append("%");
+            $("#sadness").text(data.faceAttributes.emotion.sadness * 100).append("%");
+            $("#surprise").text(data.faceAttributes.emotion.surprise * 100).append("%");
+        });
+    };
+
+   // function temp() {
+  //      $("#karta").css("display", "block");
+ //   }
+  //  temp();
+
+
+    /* Dropzone */
+    // "imageUpload" is the camelized version of the HTML element's ID
+    Dropzone.options.imageUpload = {
+        paramName: "files", // The name that will be used to transfer the file
+        dictDefaultMessage: "Upuść albo kliknij tutaj aby wgrać zdjęcie.",
+        addRemoveLinks: true, // Allows for cancellation of file upload and remove thumbnail
+        init: function () {
+            myDropzone = this;
+            myDropzone.on("success", function (file, response) {
+                console.log("Success");
+                fetchImageLinks();
+                myDropzone.removeFile(file);
+            });
+        }
+    };
+</script>
+
