@@ -37,16 +37,10 @@
                 margin-top 1.5rem;
             }
 
-   #karta > ul > li
-   {
-       display:inherit;
-   }
-   #karta > ul > li p
-   {
-       margin-left: 5px;
-   }
-
-
+    .karta
+    {
+        max-width:250px;
+    }
 </style>
 
 
@@ -75,38 +69,7 @@
             </form>
         </div>
     </div>
-    <div id="karta" class="card mx-auto text-left" style="width: 18rem; display:none;">
-        <div class="card-body">
-            <h5 class="card-title">Informacje o zdjęciu</h5>
-        </div>
-        <ul id="infolist" class="list-group list-group-flush">
-            <li class="list-group-item">Płeć: <p id="gender"></p></li>
-            <li class="list-group-item">Wiek: <p id="age"></p></li>
-            <li class="list-group-item">Uśmiech w: <p id="smile"></p></li>
-            <li class="list-group-item">Okulary: <p id="glasses"></p></li>
-        </ul>
-        <div class="card-body">
-            <h5 class="card-title">Włosy na twarzy</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Wąsy: <p id="wasy"></p></li>
-            <li class="list-group-item">Broda: <p id="broda"></p></li>
-            <li class="list-group-item">Boczki: <p id="boczki"></p></li>
-        </ul>
-        <div class="card-body">
-            <h5 class="card-title">Emocje</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Złość: <p id="anger"></p></li>
-            <li class="list-group-item">Pogarda: <p id="contempt"></p></li>
-            <li class="list-group-item">Obrzydzenie: <p id="disgust"></p></li>
-            <li class="list-group-item">Strach: <p id="fear"></p></li>
-            <li class="list-group-item">Szczęście: <p id="hapiness"></p></li>
-            <li class="list-group-item">Neutral: <p id="neutral"></p></li>
-            <li class="list-group-item">Smutek: <p id="sadness"></p></li>
-            <li class="list-group-item">Zaskoczonko: <p id="surprise"></p></li>
-        </ul>
-    </div>
+    <div id="karty" class="card-deck"></div>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -119,34 +82,88 @@
 
 <script>
 
-    function fetchImageLinks() {
-        $.get("api/Images/thumbnails", function (data) {
-            $("#karta").css("display", "block");
-            $("#gender").text(data.faceAttributes.gender);
-            $("#age").text(data.faceAttributes.age);
-            $("#smile").text(data.faceAttributes.smile * 100).append("%");
-            $("#glasses").text(data.faceAttributes.glasses);
+    function loadCards() {
+        $.get("api/Images/thumbnails", function (datas) {
 
-            $("#wasy").text(data.faceAttributes.facialHair.moustache * 100).append("%");
-            $("#broda").text(data.faceAttributes.facialHair.beard * 100).append("%");
-            $("#boczki").text(data.faceAttributes.facialHair.sideburns * 100).append("%");
+            var counter = 1;
+            $("#karty").html("");
 
-            $("#anger").text(data.faceAttributes.emotion.anger * 100).append("%");
-            $("#contempt").text(data.faceAttributes.emotion.contempt * 100).append("%");
-            $("#disgust").text(data.faceAttributes.emotion.disgust * 100).append("%");
-            $("#fear").text(data.faceAttributes.emotion.fear * 100).append("%");
-            $("#hapiness").text(data.faceAttributes.emotion.hapiness * 100).append("%");
-            $("#neutral").text(data.faceAttributes.emotion.neutral * 100).append("%");
-            $("#sadness").text(data.faceAttributes.emotion.sadness * 100).append("%");
-            $("#surprise").text(data.faceAttributes.emotion.surprise * 100).append("%");
+            $.each(datas, function (key, data){
+
+                var bgColor = 'bg-primary'; 
+                var borderColor = 'border-primary';
+
+                if (data.faceAttributes.gender == 'female') {
+                    bgColor = 'bg-danger';
+                    borderColor = 'border-danger';
+                }
+
+                var karta = $('<div/>')
+                    .addClass('karta')
+                    .addClass('card')
+                    .addClass('text-left')
+                    .addClass(borderColor)
+                    .addClass('mx-auto');
+
+                var divbody1 = $('<div/>')
+                    .addClass(bgColor)
+                    .addClass('text-white')
+                    .addClass('card-body');
+                var h5body1 = $('<h5/>')
+                    .text("Informacje o twarzy ").append(counter)
+                    .addClass('card-title');
+
+                var ul1 = $('<ul/>').addClass('list-group').addClass('list-group-flush').attr("id", "infolist");
+                var li1 = $('<il/>').addClass('list-group-item').text("Płeć: ").append(data.faceAttributes.gender);
+                var li2 = $('<il/>').addClass('list-group-item').text("Wiek: ").append(data.faceAttributes.age);
+                var li3 = $('<il/>').addClass('list-group-item').text("Uśmiech: ").append((data.faceAttributes.smile * 100).toFixed(1)).append("%");
+                var li4 = $('<il/>').addClass('list-group-item').text("Okulary: ").append(data.faceAttributes.glasses);
+
+                ul1.append(li1).append(li2).append(li3).append(li4);
+
+                var divbody2 = $('<div/>')
+                    .addClass('card-body');
+                var h5body2 = $('<h5/>')
+                    .text("Włosy na twarzy")
+                    .addClass('card-title');
+
+                var ul2 = $('<ul/>').addClass('list-group').addClass('list-group-flush').attr("id", "infolist");
+                var li11 = $('<il/>').addClass('list-group-item').text("Wąsy: ").append((data.faceAttributes.facialHair.moustache * 100).toFixed(1)).append("%");
+                var li22 = $('<il/>').addClass('list-group-item').text("Broda: ").append((data.faceAttributes.facialHair.beard * 100).toFixed(1)).append("%");
+                var li33 = $('<il/>').addClass('list-group-item').text("Boczki: ").append((data.faceAttributes.facialHair.sideburns * 100).toFixed(1)).append("%");
+
+                ul2.append(li11).append(li22).append(li33);
+
+                var divbody3 = $('<div/>')
+                    .addClass('card-body');
+                var h5body3 = $('<h5/>')
+                    .text("Emocje")
+                    .addClass('card-title');
+
+                var ul3 = $('<ul/>').addClass('list-group').addClass('list-group-flush').attr("id", "infolist");
+                var lis1 = $('<il/>').addClass('list-group-item').text("Złość: ").append((data.faceAttributes.emotion.anger * 100).toFixed(1)).append("%");
+                var lis2 = $('<il/>').addClass('list-group-item').text("Pogarda: ").append((data.faceAttributes.emotion.contempt * 100).toFixed(1)).append("%");
+                var lis3 = $('<il/>').addClass('list-group-item').text("Obrzydzenie: ").append((data.faceAttributes.emotion.disgust * 100).toFixed(1)).append("%");
+                var lis4 = $('<il/>').addClass('list-group-item').text("Strach: ").append((data.faceAttributes.emotion.fear * 100).toFixed(1)).append("%");
+                var lis5 = $('<il/>').addClass('list-group-item').text("Szczęście: ").append((data.faceAttributes.emotion.happiness * 100).toFixed(1)).append("%");
+                var lis6 = $('<il/>').addClass('list-group-item').text("Neutral: ").append((data.faceAttributes.emotion.neutral * 100).toFixed(1)).append("%");
+                var lis7 = $('<il/>').addClass('list-group-item').text("Smutek: ").append((data.faceAttributes.emotion.sadness * 100).toFixed(1)).append("%");
+                var lis8 = $('<il/>').addClass('list-group-item').text("Zaskoczenie: ").append((data.faceAttributes.emotion.surprise * 100).toFixed(1)).append("%");
+
+                ul3.append(lis1).append(lis2).append(lis3).append(lis4).append(lis5).append(lis6).append(lis7).append(lis8);
+
+                divbody1.append(h5body1);
+
+                divbody2.append(h5body2);
+
+                divbody3.append(h5body3);
+                karta.append(divbody1).append(ul1).append(divbody2).append(ul2).append(divbody3).append(ul3);
+
+                counter++;
+                $("#karty").append(karta);
+            });
         });
-    };
-
-   // function temp() {
-  //      $("#karta").css("display", "block");
- //   }
-  //  temp();
-
+      }
 
     /* Dropzone */
     // "imageUpload" is the camelized version of the HTML element's ID
@@ -158,7 +175,7 @@
             myDropzone = this;
             myDropzone.on("success", function (file, response) {
                 console.log("Success");
-                fetchImageLinks();
+                loadCards();
                 myDropzone.removeFile(file);
             });
         }

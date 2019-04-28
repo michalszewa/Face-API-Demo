@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,13 +9,14 @@ using System.Web;
 using DemoPrezentacja.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace DemoPrezentacja.Helpers
 {
     public class FaceApiHelper
     {
         public static string imageUrl = "";
-        public static async Task<FaceApiResponse.FaceInfo> MakeRequest(FaceApiConfig _faceApiConfig)
+        public static async Task<List<FaceApiResponse.FaceInfo>> MakeRequest(FaceApiConfig _faceApiConfig)
         {
             var client = new HttpClient();
             var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -38,10 +40,9 @@ namespace DemoPrezentacja.Helpers
             var response = await client.PostAsync(uri, stringContent);
 
             string content = response.Content.ReadAsStringAsync().Result;
-            content = content.Substring(1, content.Length - 2);
-            FaceApiResponse.FaceInfo face = JsonConvert.DeserializeObject<FaceApiResponse.FaceInfo>(content);
+            List<FaceApiResponse.FaceInfo> faces = JsonConvert.DeserializeObject<List<FaceApiResponse.FaceInfo>>(content);
 
-            return face;
+            return faces;
         }
     }
 }
