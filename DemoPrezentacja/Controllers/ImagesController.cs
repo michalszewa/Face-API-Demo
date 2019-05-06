@@ -104,36 +104,3 @@ namespace DemoPrezentacja.Controllers
 
 }
 
-/*
-          <div class="card-body">
-            <h5 class="card-title">Informacje o zdjęciu</h5>
-        </div>
-        <ul id="infolist" class="list-group list-group-flush">
-            <li class="list-group-item">Płeć: <p id="gender"></p></li>
-            <li class="list-group-item">Wiek: <p id="age"></p></li>
-            <li class="list-group-item">Uśmiech w: <p id="smile"></p></li>
-            <li class="list-group-item">Okulary: <p id="glasses"></p></li>
-        </ul>
-        <div class="card-body">
-            <h5 class="card-title">Włosy na twarzy</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Wąsy: <p id="wasy"></p></li>
-            <li class="list-group-item">Broda: <p id="broda"></p></li>
-            <li class="list-group-item">Boczki: <p id="boczki"></p></li>
-        </ul>
-        <div class="card-body">
-            <h5 class="card-title">Emocje</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Złość: <p id="anger"></p></li>
-            <li class="list-group-item">Pogarda: <p id="contempt"></p></li>
-            <li class="list-group-item">Obrzydzenie: <p id="disgust"></p></li>
-            <li class="list-group-item">Strach: <p id="fear"></p></li>
-            <li class="list-group-item">Szczęście: <p id="hapiness"></p></li>
-            <li class="list-group-item">Neutral: <p id="neutral"></p></li>
-            <li class="list-group-item">Smutek: <p id="sadness"></p></li>
-            <li class="list-group-item">Zaskoczonko: <p id="surprise"></p></li>
-        </ul>
-
-    */
